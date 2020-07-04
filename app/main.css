@@ -2,8 +2,10 @@ body {
   font-family: "Public Sans", sans-serif;
 }
 
-.header-bar {
-  background-color: #54678f !important;
+.header {
+  max-height: 5px;
+  background-color: #a37c27 !important;
+  margin-bottom: 300px !important;
 }
 
 .container--narrow {
@@ -13,12 +15,32 @@ body {
 .header-search-icon {
   position: relative;
   top: 3px;
+  color: #282726;
 }
 
 .header-chat-icon {
   cursor: pointer;
   position: relative;
   top: 3px;
+  color: #282726;
+}
+
+.logo-box {
+  max-height: 180px;
+  margin: 0;
+}
+
+.logo {
+  height: 200px;
+}
+
+.btn-success {
+  border-color: #a37c27;
+  background-color: #a37c27;
+}
+
+.btn-success:hover {
+  background-color: #282726;
 }
 
 .chat-count-badge {
@@ -29,6 +51,7 @@ body {
   width: 16px;
   font-size: 0.6rem;
   font-weight: bold;
+  color: #a37c27;
 }
 
 .avatar-small {
@@ -47,6 +70,10 @@ body {
   margin-right: 4px;
   position: relative;
   top: -1px;
+}
+
+.terms {
+  margin-top: 200px !important;
 }
 
 .form-control-title {

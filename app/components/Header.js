@@ -1,28 +1,27 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
+import logo from "../../img/logo.png"
+
+// Import components
+import HeaderLoggedOut from "./HeaderLoggedOut"
+import HeaderLoggedIn from "./HeaderLoggedIn"
 
 function Header() {
+  // Track the logged in state
+  const [loggedIn, setLoggedIn] = useState()
   return (
-    <header className="header-bar bg-primary mb-3">
-      <div className="container d-flex flex-column flex-md-row align-items-center p-3">
-        <h4 className="my-0 mr-md-auto font-weight-normal">
-          <Link to="/" className="text-white">
-            Write With Me
-          </Link>
-        </h4>
-        <form className="mb-0 pt-2 pt-md-0">
-          <div className="row align-items-center">
-            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <input name="username" className="form-control form-control-sm input-dark" type="text" placeholder="Username" autoComplete="off" />
-            </div>
-            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <input name="password" className="form-control form-control-sm input-dark" type="password" placeholder="Password" />
-            </div>
-            <div className="col-md-auto">
-              <button className="btn btn-success btn-sm">Sign In</button>
-            </div>
+    <header className="header header-bar bg-primary mb-3">
+      <div className="header-container">
+        <div className=" container d-flex flex-column flex-md-row align-items-center p-3">
+          <div className="my-0 mr-md-auto">
+            <Link to="/" className="text-white">
+              <img src={logo} className="logo" />
+            </Link>
           </div>
-        </form>
+          {/* Expression */}
+          {/* If loggedIn state is true, display the loggedIn header component, if it is false, display the loggedOut component */}
+          {loggedIn ? <HeaderLoggedIn setLoggedIn={setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={setLoggedIn} />}
+        </div>
       </div>
     </header>
   )
