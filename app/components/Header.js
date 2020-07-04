@@ -1,27 +1,24 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import logo from "../../img/logo.png"
+import logo from "../../img/logo2.png"
 
 // Import components
 import HeaderLoggedOut from "./HeaderLoggedOut"
 import HeaderLoggedIn from "./HeaderLoggedIn"
 
-function Header() {
-  // Track the logged in state
-  const [loggedIn, setLoggedIn] = useState()
+// Pass in props to access the loggedIn state (Main.js)
+function Header(props) {
   return (
-    <header className="header header-bar bg-primary mb-3">
-      <div className="header-container">
-        <div className=" container d-flex flex-column flex-md-row align-items-center p-3">
-          <div className="my-0 mr-md-auto">
-            <Link to="/" className="text-white">
-              <img src={logo} className="logo" />
-            </Link>
-          </div>
-          {/* Expression */}
-          {/* If loggedIn state is true, display the loggedIn header component, if it is false, display the loggedOut component */}
-          {loggedIn ? <HeaderLoggedIn setLoggedIn={setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={setLoggedIn} />}
-        </div>
+    <header className="header-bar bg-primary mb-3">
+      <div className="container d-flex flex-column flex-md-row align-items-center p-3">
+        <h4 className="my-0 mr-md-auto font-weight-normal">
+          <Link to="/" className="text-white">
+            <img src={logo} className="logo" />
+          </Link>
+        </h4>
+        {/* Expression */}
+        {/* If loggedIn state is true, display the loggedIn header component, if it is false, display the loggedOut component */}
+        {props.loggedIn ? <HeaderLoggedIn setLoggedIn={props.setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={props.setLoggedIn} />}
       </div>
     </header>
   )

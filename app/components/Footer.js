@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 function Footer() {
   return (
-    <footer className="footer border-top text-center small text-muted py-3">
+    <footer className="border-top text-center small text-muted py-3">
       <p>
         <Link to="/" className="mx-1">
           Home
@@ -20,7 +20,7 @@ function Footer() {
       <p className="m-0">
         Copyright &copy; 2020{" "}
         <Link to="/" className="text-muted">
-          ComplexApp
+          REDISCOVER Writing
         </Link>
         . All rights reserved.
       </p>

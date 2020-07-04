@@ -1,11 +1,17 @@
 body {
-  font-family: "Public Sans", sans-serif;
+  font-family: "Open Sans", sans-serif;
+  color: #606060;
 }
 
-.header {
-  max-height: 5px;
-  background-color: #a37c27 !important;
-  margin-bottom: 300px !important;
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Noto Serif", serif;
+}
+
+.header-bar {
+  background-color: #e1dcd1 !important;
 }
 
 .container--narrow {
@@ -31,7 +37,7 @@ body {
 }
 
 .logo {
-  height: 200px;
+  height: 80px;
 }
 
 .btn-success {
@@ -72,8 +78,26 @@ body {
   top: -1px;
 }
 
-.terms {
+.welcome {
+  margin-top: 100px !important;
+  margin-bottom: 200px !important;
+}
+
+.welcome-title {
+  margin-bottom: 30px;
+}
+
+.welcome-title__span {
+  font-size: 48px;
+  font-style: italic;
+  color: #a37c27;
+}
+
+.terms,
+.about,
+.content-container {
   margin-top: 200px !important;
+  margin-bottom: 200px !important;
 }
 
 .form-control-title {
