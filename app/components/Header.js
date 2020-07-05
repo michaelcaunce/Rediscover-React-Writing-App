@@ -18,7 +18,7 @@ function Header(props) {
         </h4>
         {/* Expression */}
         {/* If loggedIn state is true, display the loggedIn header component, if it is false, display the loggedOut component */}
-        {props.loggedIn ? <HeaderLoggedIn setLoggedIn={props.setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={props.setLoggedIn} />}
+        {props.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
       </div>
     </header>
   )
