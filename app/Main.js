@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useReducer } from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import Axios from "axios"
@@ -19,6 +19,28 @@ import FlashMessages from "./components/FlashMessages"
 import ExampleContext from "./ExampleContext"
 
 function Main() {
+  // object
+  const initialState = {
+    loggedIn: Boolean(localStorage.getItem("complexappToken")),
+    flashMessages: []
+  }
+  // Whatever is included in dispatch parentheses (when called) is passed as 'action'
+  function ourReducer(state, action) {
+    switch (action.type) {
+      // Outline the differect cases dependent on the value of action.value
+      case "login":
+        return { loggedIn: true, flashMessages: state.flashMessages }
+      case "logout":
+        return { loggedIn: false, flashMessages: state.flashMessages }
+      case "flashMessage":
+        return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
+    }
+  }
+  // useReducer, return a piece of state and something to use to call
+  // call useReducer function and set the value of state
+  // When we call it, we give it it's initial state, then a function
+  const [state, dispatch] = useReducer(ourReducer, initialState)
+
   // Track the logged in state
   // If complexappToken exists in local storage, set the value to true
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken")))
