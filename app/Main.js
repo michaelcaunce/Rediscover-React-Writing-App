@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react"
+import React, { useState, useReducer, useContext } from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import Axios from "axios"
@@ -16,7 +16,9 @@ import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
 
-import ExampleContext from "./ExampleContext"
+// Import contexts
+import StateContext from "./StateContext"
+import DispatchContext from "./DispatchContext"
 
 function Main() {
   // object
@@ -41,55 +43,47 @@ function Main() {
   // When we call it, we give it it's initial state, then a function
   const [state, dispatch] = useReducer(ourReducer, initialState)
 
-  // Track the logged in state
-  // If complexappToken exists in local storage, set the value to true
-  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken")))
-  const [flashMessages, setFlashMessages] = useState([])
-
-  // Function to pass into create post component
-  function addFlashMessage(msg) {
-    // Function in the parameter to work with previous values
-    setFlashMessages(prev => prev.concat(msg))
-  }
   return (
-    <ExampleContext.Provider value={{ addFlashMessage, setLoggedIn }}>
-      {/* Wrap the application within a Router component */}
-      <BrowserRouter>
-        {/* Render the flash messges component with the passed in state from the about function */}
-        <FlashMessages messages={flashMessages} />
-        {/* add the imported components */}
-        {/* Pass in the loggedIn state */}
-        <Header loggedIn={loggedIn} />
+    // useReducer combined with context
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
+        {/* Wrap the application within a Router component */}
+        <BrowserRouter>
+          {/* Render the flash messges component with the passed in state from the about function */}
+          <FlashMessages messages={state.flashMessages} />
+          {/* add the imported components */}
+          <Header />
 
-        {/* Switch component */}
-        <Switch>
-          {/* Home route */}
-          <Route path="/" exact>
-            {/* Terninary operator - If loggedIn, display the home component, else, display homeguest component*/}
-            {loggedIn ? <Home /> : <HomeGuest />}
-          </Route>
-          {/* Create Single Post route */}
-          <Route path="/post/:id">
-            <ViewSinglePost />
-          </Route>
-          {/* Create Post route */}
-          <Route path="/create-post">
-            <CreatePost />
-          </Route>
-          {/* About route */}
-          <Route path="/about-us">
-            <About />
-          </Route>
-          {/* Terms route */}
-          <Route path="/terms">
-            <Terms />
-          </Route>
-        </Switch>
+          {/* Switch component */}
+          <Switch>
+            {/* Home route */}
+            <Route path="/" exact>
+              {/* Terninary operator - If loggedIn, display the home component, else, display homeguest component*/}
+              {state.loggedIn ? <Home /> : <HomeGuest />}
+            </Route>
+            {/* Create Single Post route */}
+            <Route path="/post/:id">
+              <ViewSinglePost />
+            </Route>
+            {/* Create Post route */}
+            <Route path="/create-post">
+              <CreatePost />
+            </Route>
+            {/* About route */}
+            <Route path="/about-us">
+              <About />
+            </Route>
+            {/* Terms route */}
+            <Route path="/terms">
+              <Terms />
+            </Route>
+          </Switch>
 
-        {/* add the imported components */}
-        <Footer />
-      </BrowserRouter>
-    </ExampleContext.Provider>
+          {/* add the imported components */}
+          <Footer />
+        </BrowserRouter>
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   )
 }
 
