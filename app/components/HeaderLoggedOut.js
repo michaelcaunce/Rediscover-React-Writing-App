@@ -11,7 +11,7 @@ function HeaderLoggedOut(props) {
     // Axios request
     try {
       // Send login request
-      const response = await Axios.post("http://localhost:8080/login", { username, password })
+      const response = await Axios.post("/login", { username, password })
       if (response.data) {
         // Save values in local storage
         localStorage.setItem("complexappToken", response.data.token)

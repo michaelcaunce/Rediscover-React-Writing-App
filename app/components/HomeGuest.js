@@ -14,7 +14,7 @@ function HomeGuest() {
     e.preventDefault()
     try {
       // Axios post request matching the values above
-      await Axios.post("http://localhost:8080/register", { username, email, password })
+      await Axios.post("/register", { username, email, password })
       console.log("user was created!")
     } catch (e) {
       console.log("error found")
