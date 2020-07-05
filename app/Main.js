@@ -1,5 +1,6 @@
 import React, { useState, useReducer, useContext } from "react"
 import ReactDOM from "react-dom"
+import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import Axios from "axios"
 // set the default url for all axios requests
@@ -27,21 +28,24 @@ function Main() {
     flashMessages: []
   }
   // Whatever is included in dispatch parentheses (when called) is passed as 'action'
-  function ourReducer(state, action) {
+  function ourReducer(draft, action) {
     switch (action.type) {
       // Outline the differect cases dependent on the value of action.value
       case "login":
-        return { loggedIn: true, flashMessages: state.flashMessages }
+        draft.loggedIn = true
+        return
       case "logout":
-        return { loggedIn: false, flashMessages: state.flashMessages }
+        draft.loggedIn = false
+        return
       case "flashMessage":
-        return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
+        draft.flashMessages.push(action.value)
+        return
     }
   }
-  // useReducer, return a piece of state and something to use to call
-  // call useReducer function and set the value of state
+  // useImmerReducer, return a piece of state and something to use to call
+  // call useImmerReducer function and set the value of state
   // When we call it, we give it it's initial state, then a function
-  const [state, dispatch] = useReducer(ourReducer, initialState)
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState)
 
   return (
     // useReducer combined with context
