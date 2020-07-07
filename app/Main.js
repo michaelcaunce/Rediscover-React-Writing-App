@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext } from "react"
+import React, { useState, useReducer, useContext, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
@@ -25,7 +25,13 @@ function Main() {
   // object
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("complexappToken")),
-    flashMessages: []
+    flashMessages: [],
+    // Object to pull data from local storage
+    user: {
+      token: localStorage.getItem("complexappToken"),
+      username: localStorage.getItem("complexappUsername"),
+      avatar: localStorage.getItem("complexappAvatar")
+    }
   }
   // Whatever is included in dispatch parentheses (when called) is passed as 'action'
   function ourReducer(draft, action) {
@@ -33,6 +39,7 @@ function Main() {
       // Outline the differect cases dependent on the value of action.value
       case "login":
         draft.loggedIn = true
+        draft.user = action.data
         return
       case "logout":
         draft.loggedIn = false
@@ -46,6 +53,20 @@ function Main() {
   // call useImmerReducer function and set the value of state
   // When we call it, we give it it's initial state, then a function
   const [state, dispatch] = useImmerReducer(ourReducer, initialState)
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      // Save values in local storage
+      localStorage.setItem("complexappToken", state.user.token)
+      localStorage.setItem("complexappUsername", state.user.username)
+      localStorage.setItem("complexappAvatar", state.user.avatar)
+    } else {
+      // Remove values in local storage
+      localStorage.removeItem("complexappToken")
+      localStorage.removeItem("complexappUsername")
+      localStorage.removeItem("complexappAvatar")
+    }
+  }, [state.loggedIn])
 
   return (
     // useReducer combined with context
