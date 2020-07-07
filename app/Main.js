@@ -16,6 +16,7 @@ import Terms from "./components/Terms"
 import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
+import Profile from "./components/Profile"
 
 // Import contexts
 import StateContext from "./StateContext"
@@ -93,6 +94,10 @@ function Main() {
             {/* Create Post route */}
             <Route path="/create-post">
               <CreatePost />
+            </Route>
+            {/* User Profile Route*/}
+            <Route path="/profile/:username">
+              <Profile />
             </Route>
             {/* About route */}
             <Route path="/about-us">
