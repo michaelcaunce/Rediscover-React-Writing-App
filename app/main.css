@@ -11,7 +11,7 @@ h4 {
 }
 
 .header-bar {
-  background-color: #f2f3f3 !important;
+  background-color: #9cafb7 !important;
 }
 
 .container--narrow {
@@ -40,9 +40,14 @@ h4 {
   height: 80px;
 }
 
+.btn-blue {
+  border-color: #9cafb7;
+  background-color: #9cafb7;
+}
+
 .btn-success {
-  border-color: #a37c27;
-  background-color: #a37c27;
+  border-color: #564946;
+  background-color: #564946;
 }
 
 .btn-success:hover {
@@ -90,7 +95,7 @@ h4 {
 .welcome-title__span {
   font-size: 48px;
   font-style: italic;
-  color: #a37c27;
+  color: #9cafb7;
 }
 
 .terms,
