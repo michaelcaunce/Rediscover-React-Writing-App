@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react"
 import Page from "./Page"
 import { useParams, Link } from "react-router-dom"
 import Axios from "axios"
+import ReactMarkdown from "react-markdown"
+
+import LoadingDotsIcons from "./LoadingDotsIcon"
 
 function ViewSinglePost() {
   const { id } = useParams()
@@ -10,24 +13,30 @@ function ViewSinglePost() {
 
   // Send request to the backend
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source()
+
     async function fetchPost() {
       try {
-        const response = await Axios.get(`/post/${id}`)
+        const response = await Axios.get(`/post/${id}`, { cancelToken: ourRequest.token })
         // Store the value in state
         setPost(response.data)
         // Set is loading to false to display all posts
         setIsLoading(false)
       } catch (e) {
-        console.log("error")
+        console.log("There was an error or the request was cancelled")
       }
     }
     fetchPost()
+    // Function to run when this component stops being rendered.
+    return () => {
+      ourRequest.cancel()
+    }
   }, [])
 
   if (isLoading)
     return (
       <Page title="...">
-        <div>Loading...</div>
+        <LoadingDotsIcons />
       </Page>
     )
 
@@ -56,7 +65,10 @@ function ViewSinglePost() {
           Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormatted}
         </p>
 
-        <div className="body-content">{post.body}</div>
+        <div className="body-content">
+          {/* Add react markdown */}
+          <ReactMarkdown source={post.body} allowedTypes={["paragraph", "strong", "emphasis", "text", "heading", "list", "listItem", "image", "blockquote"]} />
+        </div>
       </div>
     </Page>
   )

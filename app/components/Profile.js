@@ -20,16 +20,20 @@ function Profile() {
   })
 
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source()
     // Send a request to the backend
     async function fetchData() {
       try {
-        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token })
+        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token })
         setProfileData(response.data)
       } catch (e) {
-        console.log("problem")
+        console.log("There was an error or the request was cancelled")
       }
     }
     fetchData()
+    return () => {
+      ourRequest.cancel()
+    }
   }, [])
   return (
     <Page title="Profile Screen">
