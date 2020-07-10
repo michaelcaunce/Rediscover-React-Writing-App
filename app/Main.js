@@ -18,6 +18,7 @@ import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
 import Profile from "./components/Profile"
 import EditPost from "./components/EditPost"
+import NotFound from "./components/NotFound"
 
 // Import contexts
 import StateContext from "./StateContext"
@@ -111,6 +112,10 @@ function Main() {
             {/* Terms route */}
             <Route path="/terms">
               <Terms />
+            </Route>
+            {/* Error Page route */}
+            <Route>
+              <NotFound />
             </Route>
           </Switch>
 
