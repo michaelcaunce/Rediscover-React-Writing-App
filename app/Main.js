@@ -17,6 +17,7 @@ import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
 import Profile from "./components/Profile"
+import EditPost from "./components/EditPost"
 
 // Import contexts
 import StateContext from "./StateContext"
@@ -88,8 +89,12 @@ function Main() {
               {state.loggedIn ? <Home /> : <HomeGuest />}
             </Route>
             {/* Create Single Post route */}
-            <Route path="/post/:id">
+            <Route path="/post/:id" exact>
               <ViewSinglePost />
+            </Route>
+            {/* Edit Single Post route */}
+            <Route path="/post/:id/edit" exact>
+              <EditPost />
             </Route>
             {/* Create Post route */}
             <Route path="/create-post">
