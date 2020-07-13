@@ -272,10 +272,15 @@ textarea.tall-textarea {
 }
 
 .search-overlay-icon {
-  color: #007bff;
+  color: #282726;
   font-size: 1.4rem;
   margin: 0;
   margin-right: 10px;
+}
+
+.search-top {
+  background-color: #9cafb7 !important;
+  border: #9cafb7;
 }
 
 .live-search-field {

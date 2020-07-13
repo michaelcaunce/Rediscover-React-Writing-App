@@ -20,9 +20,9 @@ function Search() {
     <div className="search-overlay">
       <div className="search-overlay-top shadow-sm">
         <div className="container container--narrow">
-          <label htmlFor="live-search-field" className="search-overlay-icon">
+          {/* <label htmlFor="live-search-field" className="search-overlay-icon">
             <i className="fas fa-search"></i>
-          </label>
+          </label> */}
           <input autoFocus type="text" autoComplete="off" id="live-search-field" className="live-search-field" placeholder="What are you interested in?" />
           <span onClick={() => appDispatch({ type: "closeSearch" })} className="close-live-search">
             <i className="fas fa-times-circle"></i>
@@ -34,7 +34,7 @@ function Search() {
         <div className="container container--narrow py-3">
           <div className="live-search-results live-search-results--visible">
             <div className="list-group shadow-sm">
-              <div className="list-group-item active">
+              <div className="list-group-item active search-top">
                 <strong>Search Results</strong> (3 items found)
               </div>
               <a href="#" className="list-group-item list-group-item-action">
