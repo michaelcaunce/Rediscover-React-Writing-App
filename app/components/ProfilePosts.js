@@ -29,7 +29,7 @@ function ProfilePosts() {
     return () => {
       ourRequest.cancel()
     }
-  }, [])
+  }, [username])
 
   if (isLoading) return <LoadingDotsIcons />
   return (
