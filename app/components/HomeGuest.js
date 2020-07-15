@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import Page from "./Page"
 import Axios from "axios"
 import { useImmerReducer } from "use-immer"
+import { CSSTransition } from "react-transition-group"
 
 function HomeGuest() {
   // Define initial state
@@ -34,6 +35,14 @@ function HomeGuest() {
       case "usernameImmediately":
         draft.username.hasErrors = false
         draft.username.value = action.value
+        if (draft.username.value.length > 30) {
+          draft.username.hasErrors = true
+          draft.username.message = "Username cannot exceed 30 characters"
+        }
+        if (draft.username.value && !/^([a-zA-Z0-9]+)$/.test(draft.username.value)) {
+          draft.username.hasErrors = true
+          draft.username.message = "Username can only contain letters and numbers"
+        }
         return
       case "usernameAfterDelay":
         return
@@ -82,6 +91,9 @@ function HomeGuest() {
                 <small>Username</small>
               </label>
               <input onChange={e => dispatch({ type: "usernameImmediately", value: e.target.value })} id="username-register" name="username" className="form-control" type="text" placeholder="Pick a username" autoComplete="off" />
+              <CSSTransition in={state.username.hasErrors} timeout={330} classNames="liveValidateMessage" unmountOnExit>
+                <div className="alert alert-danger small liveValidateMessage">{state.username.message}</div>
+              </CSSTransition>
             </div>
             <div className="form-group">
               <label htmlFor="email-register" className="text-muted mb-1">
