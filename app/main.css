@@ -407,7 +407,7 @@ textarea.tall-textarea {
 }
 
 .chat-title-bar {
-  background-color: #292929;
+  background-color: #606060;
   color: #fff;
   padding: 4px 7px;
   display: flex;
@@ -455,7 +455,7 @@ textarea.tall-textarea {
   text-align: right;
   padding: 4px 7px;
   border-radius: 12px;
-  background-color: #007bff;
+  background-color: #9cafb7;
   color: #fff;
 }
 
