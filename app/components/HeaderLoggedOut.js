@@ -17,8 +17,10 @@ function HeaderLoggedOut(props) {
       if (response.data) {
         // Update the state of setLoggedIn (header.js) using props
         appDispatch({ type: "login", data: response.data })
+        appDispatch({ type: "flashMessage", value: "You have successfully logged in." })
       } else {
         console.log("incorrect username or password")
+        appDispatch({ type: "flashMessage", value: "Invalid username or password" })
       }
     } catch (e) {
       console.log("There was a problem")
