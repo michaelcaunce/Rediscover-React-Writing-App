@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Page from "./Page"
 import Axios from "axios"
 import { useImmerReducer } from "use-immer"
 import { CSSTransition } from "react-transition-group"
+import DispatchContext from "../DispatchContext"
 
 function HomeGuest() {
+  const appDispatch = useContext(DispatchContext)
   // Define initial state
   const initialState = {
     username: {
@@ -29,7 +31,6 @@ function HomeGuest() {
     submitCount: 0
   }
 
-  // Reducer funtion
   function ourReducer(draft, action) {
     switch (action.type) {
       case "usernameImmediately":
@@ -37,21 +38,21 @@ function HomeGuest() {
         draft.username.value = action.value
         if (draft.username.value.length > 30) {
           draft.username.hasErrors = true
-          draft.username.message = "Username cannot exceed 30 characters"
+          draft.username.message = "Username cannot exceed 30 characters."
         }
         if (draft.username.value && !/^([a-zA-Z0-9]+)$/.test(draft.username.value)) {
           draft.username.hasErrors = true
-          draft.username.message = "Username can only contain letters and numbers"
+          draft.username.message = "Username can only contain letters and numbers."
         }
         return
       case "usernameAfterDelay":
         // Is the value less than 3 characters?
         if (draft.username.value.length < 3) {
           draft.username.hasErrors = true
-          draft.username.message = "Username must be at least 3 characters"
+          draft.username.message = "Username must be at least 3 characters."
         }
         // Increment the checkcount to trigger the Axios request, if there are no existing errors
-        if (!draft.hasErrors) {
+        if (!draft.hasErrors && !action.noRequest) {
           draft.username.checkCount++
         }
         return
@@ -60,7 +61,7 @@ function HomeGuest() {
         if (action.value) {
           draft.username.hasErrors = true
           draft.username.isUnique = false
-          draft.username.message = "That username is already taken"
+          draft.username.message = "That username is already taken."
         } else {
           draft.username.isUnique = true
         }
@@ -73,10 +74,9 @@ function HomeGuest() {
         // If the string does not match the basic pattern of email
         if (!/^\S+@\S+$/.test(draft.email.value)) {
           draft.email.hasErrors = true
-          draft.email.message = "You must enter a valid email address"
+          draft.email.message = "You must provide a valid email address."
         }
-
-        if (!draft.email.hasErrors) {
+        if (!draft.email.hasErrors && !action.noRequest) {
           draft.email.checkCount++
         }
         return
@@ -85,9 +85,9 @@ function HomeGuest() {
         if (action.value) {
           draft.email.hasErrors = true
           draft.email.isUnique = false
-          draft.email.message = "That email is already taken"
+          draft.email.message = "That email is already being used."
         } else {
-          draft.username.isUnique = true
+          draft.email.isUnique = true
         }
         return
       case "passwordImmediately":
@@ -96,17 +96,21 @@ function HomeGuest() {
         // Does the password exceed 50 characters?
         if (draft.password.value.length > 50) {
           draft.password.hasErrors = true
-          draft.password.message = "Password cannot exceed 50 characters"
+          draft.password.message = "Password cannot exceed 50 characters."
         }
         return
       case "passwordAfterDelay":
         // Is the password less than 12 characters?
         if (draft.password.value.length < 12) {
           draft.password.hasErrors = true
-          draft.password.message = "Password must be at least 12 characters"
+          draft.password.message = "Password must be at least 12 characters."
         }
         return
       case "submitForm":
+        // Happy with the current values?
+        if (!draft.username.hasErrors && draft.username.isUnique && !draft.email.hasErrors && draft.email.isUnique && !draft.password.hasErrors) {
+          draft.submitCount++
+        }
         return
     }
   }
@@ -145,7 +149,7 @@ function HomeGuest() {
           const response = await Axios.post("/doesUsernameExist", { username: state.username.value }, { cancelToken: ourRequest.token })
           dispatch({ type: "usernameUniqueResults", value: response.data })
         } catch (e) {
-          console.log("There was a problem or the request was cancelled")
+          console.log("There was a problem or the request was cancelled.")
         }
       }
       fetchResults()
@@ -156,14 +160,13 @@ function HomeGuest() {
   // Watch useRequest for any changes (email)
   useEffect(() => {
     if (state.email.checkCount) {
-      // Send Axios request
       const ourRequest = Axios.CancelToken.source()
       async function fetchResults() {
         try {
           const response = await Axios.post("/doesEmailExist", { email: state.email.value }, { cancelToken: ourRequest.token })
           dispatch({ type: "emailUniqueResults", value: response.data })
         } catch (e) {
-          console.log("There was a problem or the request was cancelled")
+          console.log("There was a problem or the request was cancelled.")
         }
       }
       fetchResults()
@@ -171,17 +174,41 @@ function HomeGuest() {
     }
   }, [state.email.checkCount])
 
+  useEffect(() => {
+    if (state.submitCount) {
+      const ourRequest = Axios.CancelToken.source()
+      async function fetchResults() {
+        try {
+          const response = await Axios.post("/register", { username: state.username.value, email: state.email.value, password: state.password.value }, { cancelToken: ourRequest.token })
+          appDispatch({ type: "login", data: response.data })
+          appDispatch({ type: "flashMessage", value: "Welcome to Discover, enjoy the fine art of writing." })
+        } catch (e) {
+          console.log("There was a problem or the request was cancelled.")
+        }
+      }
+      fetchResults()
+      return () => ourRequest.cancel()
+    }
+  }, [state.submitCount])
+
+  // Call all our dispatch rules (validation)
   function handleSubmit(e) {
     e.preventDefault()
+    dispatch({ type: "usernameImmediately", value: state.username.value })
+    dispatch({ type: "usernameAfterDelay", value: state.username.value, noRequest: true })
+    dispatch({ type: "emailImmediately", value: state.email.value })
+    dispatch({ type: "emailAfterDelay", value: state.email.value, noRequest: true })
+    dispatch({ type: "passwordImmediately", value: state.password.value })
+    dispatch({ type: "passwordAfterDelay", value: state.password.value })
+    // submit the form
+    dispatch({ type: "submitForm" })
   }
 
   return (
-    <Page title="Welcome" wide={true}>
-      <div className="welcome row align-items-center">
+    <Page title="Welcome!" wide={true}>
+      <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
-          <h1 className="welcome-title display-3">
-            REDISCOVER<span className="welcome-title__span">Writing</span>
-          </h1>
+          <h1 className="display-3">Remember Writing?</h1>
           <p className="lead text-muted">Are you sick of short tweets and impersonal &ldquo;shared&rdquo; posts that are reminiscent of the late 90&rsquo;s email forwards? We believe getting back to actually writing is the key to enjoying the internet again.</p>
         </div>
         <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
@@ -215,7 +242,7 @@ function HomeGuest() {
               </CSSTransition>
             </div>
             <button type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
-              Sign up for Rediscover
+              Sign up for ComplexApp
             </button>
           </form>
         </div>
