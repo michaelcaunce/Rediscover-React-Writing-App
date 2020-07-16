@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext, useEffect } from "react"
+import React, { useState, useReducer, useContext, useEffect, Suspense } from "react"
 import ReactDOM from "react-dom"
 import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
@@ -14,14 +14,18 @@ import HomeGuest from "./components/HomeGuest"
 import Home from "./components/Home"
 import About from "./components/About"
 import Terms from "./components/Terms"
-import CreatePost from "./components/CreatePost"
-import ViewSinglePost from "./components/ViewSinglePost"
+
+// Lazy load
+const CreatePost = React.lazy(() => import("./components/CreatePost"))
+const ViewSinglePost = React.lazy(() => import("./components/ViewSinglePost"))
+const Profile = React.lazy(() => import("./components/Profile"))
+
 import FlashMessages from "./components/FlashMessages"
-import Profile from "./components/Profile"
 import EditPost from "./components/EditPost"
 import NotFound from "./components/NotFound"
 import Search from "./components/Search"
 import Chat from "./components/Chat"
+import LoadingDotsIcon from "./components/LoadingDotsIcon"
 
 // Import contexts
 import StateContext from "./StateContext"
@@ -127,43 +131,46 @@ function Main() {
           <FlashMessages messages={state.flashMessages} />
           {/* add the imported components */}
           <Header />
+          {/* Suspense for lazy load */}
+          <Suspense fallback={<LoadingDotsIcon />}>
+            {/* Switch component */}
+            <Switch>
+              {/* Home route */}
+              <Route path="/" exact>
+                {/* Terninary operator - If loggedIn, display the home component, else, display homeguest component*/}
+                {state.loggedIn ? <Home /> : <HomeGuest />}
+              </Route>
+              {/* Create Single Post route */}
+              <Route path="/post/:id" exact>
+                <ViewSinglePost />
+              </Route>
+              {/* Edit Single Post route */}
+              <Route path="/post/:id/edit" exact>
+                <EditPost />
+              </Route>
+              {/* Create Post route */}
+              <Route path="/create-post">
+                <CreatePost />
+              </Route>
+              {/* User Profile Route*/}
+              <Route path="/profile/:username">
+                <Profile />
+              </Route>
+              {/* About route */}
+              <Route path="/about-us">
+                <About />
+              </Route>
+              {/* Terms route */}
+              <Route path="/terms">
+                <Terms />
+              </Route>
+              {/* Error Page route */}
+              <Route>
+                <NotFound />
+              </Route>
+            </Switch>
+          </Suspense>
 
-          {/* Switch component */}
-          <Switch>
-            {/* Home route */}
-            <Route path="/" exact>
-              {/* Terninary operator - If loggedIn, display the home component, else, display homeguest component*/}
-              {state.loggedIn ? <Home /> : <HomeGuest />}
-            </Route>
-            {/* Create Single Post route */}
-            <Route path="/post/:id" exact>
-              <ViewSinglePost />
-            </Route>
-            {/* Edit Single Post route */}
-            <Route path="/post/:id/edit" exact>
-              <EditPost />
-            </Route>
-            {/* Create Post route */}
-            <Route path="/create-post">
-              <CreatePost />
-            </Route>
-            {/* User Profile Route*/}
-            <Route path="/profile/:username">
-              <Profile />
-            </Route>
-            {/* About route */}
-            <Route path="/about-us">
-              <About />
-            </Route>
-            {/* Terms route */}
-            <Route path="/terms">
-              <Terms />
-            </Route>
-            {/* Error Page route */}
-            <Route>
-              <NotFound />
-            </Route>
-          </Switch>
           <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
             <Search />
           </CSSTransition>
