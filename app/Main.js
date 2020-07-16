@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom"
 import Axios from "axios"
 import { CSSTransition } from "react-transition-group"
 // set the default url for all axios requests
-Axios.defaults.baseURL = "http://localhost:8080"
+Axios.defaults.baseURL = process.env.BACKENDURL || ""
 
 // Import components
 import Header from "./components/Header"
