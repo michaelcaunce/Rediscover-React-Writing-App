@@ -36,9 +36,10 @@ function ProfilePosts() {
   return (
     <div className="list-group">
       {/* Loop through the array of data */}
-      {posts.map(post => {
-        return <Post noAuthor={true} post={post} key={post._id} />
-      })}
+      {posts.length &&
+        posts.map(post => {
+          return <Post noAuthor={true} post={post} key={post._id} />
+        })}
     </div>
   )
 }

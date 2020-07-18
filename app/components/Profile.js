@@ -9,6 +9,7 @@ import { useImmer } from "use-immer"
 import ProfilePost from "../components/ProfilePosts"
 import ProfileFollowers from "../components/ProfileFollowers"
 import ProfileFollowing from "../components/ProfileFollowing"
+import NotFound from "../components/NotFound"
 
 function Profile() {
   // useParams will return an object
@@ -23,20 +24,25 @@ function Profile() {
       profileAvatar: "https://gravatar.com/avatar/placeholder?s=128",
       isFollowing: false,
       counts: { postCount: "", followerCount: "", followingCount: "" }
-    }
+    },
+    notFound: false
   })
 
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source()
-    // Send a request to the backend
+
     async function fetchData() {
       try {
         const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token })
         setState(draft => {
-          draft.profileData = response.data
+          if (response.data) {
+            draft.profileData = response.data
+          } else {
+            draft.notFound = true
+          }
         })
       } catch (e) {
-        console.log("There was an error or the request was cancelled")
+        console.log("There was a problem.")
       }
     }
     fetchData()
@@ -111,8 +117,15 @@ function Profile() {
     }
   }, [state.stopFollowingRequestCount])
 
+  if (state.notFound)
+    return (
+      <Page title="Profile not found!">
+        <NotFound />
+      </Page>
+    )
+
   return (
-    <Page title="Profile Screen">
+    <Page title={`${username}'s Profile`}>
       <div className="content-container">
         <h2>
           <img className="avatar-small" src={state.profileData.profileAvatar} /> {state.profileData.profileUsername}

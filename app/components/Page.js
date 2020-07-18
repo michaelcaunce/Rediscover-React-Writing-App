@@ -6,7 +6,7 @@ function Page(props) {
   // In this case, we aren't looking for anything particular. [] tells React to only run this the first time the component is rendered.
   useEffect(() => {
     // Arrow function for the components title
-    document.title = `${props.title} | Complex App`
+    document.title = "REDISCOVER | The Art of Writing"
     // Scroll to the top of the page
     window.scrollTo(0, 0)
   }, [props.title])

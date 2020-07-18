@@ -6,6 +6,7 @@ import LoadingDotsIcon from "./LoadingDotsIcon"
 import Axios from "axios"
 import { Link } from "react-router-dom"
 import Post from "./Post"
+import logo from "../../img/logo.png"
 
 function Home() {
   const appState = useContext(StateContext)
@@ -45,6 +46,10 @@ function Home() {
   return (
     <Page title="Your Feed">
       <div className="content-container">
+        <div className="logo-box">
+          <img src={logo} className="logo" />
+        </div>
+
         {state.feed.length > 0 && (
           <>
             <h2 className="text-center mb-4">The latest from your followers</h2>
