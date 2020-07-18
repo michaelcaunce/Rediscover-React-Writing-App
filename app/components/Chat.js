@@ -5,7 +5,7 @@ import { useImmer } from "use-immer"
 import io from "socket.io-client"
 import { Link } from "react-router-dom"
 
-const socket = io("http://localhost:8080")
+const socket = io("https://rediscover-react-backend.herokuapp.com")
 
 function Chat() {
   const chatField = useRef(null)
