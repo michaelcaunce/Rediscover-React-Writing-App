@@ -121,6 +121,7 @@ function EditPost(props) {
           const response = await Axios.post(`/post/${state.id}/edit`, { title: state.title.value, body: state.body.value, token: appState.user.token }, { cancelToken: ourRequest.token })
           dispatch({ type: "saveRequestFinished" })
           appDispatch({ type: "flashMessage", value: "Post was updated" })
+          props.history.push(`/post/${state.id}`)
         } catch (e) {
           console.log("There was a problem or the request was cancelled.")
         }
