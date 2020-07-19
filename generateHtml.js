@@ -64,8 +64,9 @@ const reactHtml = ReactDOMServer.renderToString(<Shell />)
 const overallHtmlString = html(reactHtml)
 
 /*
-  Save our generated string into a file named
-  index-template.html. This Node task
+  This course is not about Node, but here we are simply
+  saving our generated string into a file named
+  index-template.html. Please note that this Node task
   will fail if the directory we told it to live within
   ("app" in this case) does not already exist.
 */

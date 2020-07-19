@@ -15,7 +15,6 @@ class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap("Copy files", function () {
       fse.copySync("./app/main.css", "./dist/main.css")
-      fse.copySync("./app/img", "./dist/img")
 
       /*
         If you needed to copy another file or folder
@@ -55,10 +54,6 @@ config = {
             presets: ["@babel/preset-react", ["@babel/preset-env", { targets: { node: "12" } }]]
           }
         }
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"]
       }
     ]
   }

@@ -4,7 +4,6 @@ import Axios from "axios"
 import { useImmerReducer } from "use-immer"
 import { CSSTransition } from "react-transition-group"
 import DispatchContext from "../DispatchContext"
-import logo from "../../img/logo.png"
 
 function HomeGuest() {
   const appDispatch = useContext(DispatchContext)
@@ -209,9 +208,6 @@ function HomeGuest() {
     <Page title="Welcome!" wide={true}>
       <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
-          <div className="logo-box">
-            <img src={logo} className="logo" />
-          </div>
           <p className="lead text-muted">Are you sick of short tweets and impersonal &ldquo;shared&rdquo; posts that are reminiscent of the late 90&rsquo;s email forwards? We believe getting back to actually writing is the key to enjoying the internet again.</p>
         </div>
         <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
